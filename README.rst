@@ -1,7 +1,8 @@
 kotti_history
 *************
 
-This is an extension to Kotti that allows to add foo to your site.
+This is an extension to Kotti that allows to track the viewing existing content types in your site.
+In addition, it tracks user searches.
 
 |pypi|_
 |downloads_month|_
@@ -33,6 +34,7 @@ To enable the extension in your Kotti site, activate the configurator::
 
     kotti.configurators =
         kotti_history.kotti_configure
+        kotti_controlpanel.kotti_configure
 
 Database upgrade
 ================

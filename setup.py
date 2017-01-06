@@ -14,18 +14,19 @@ try:
 except IOError:
     CHANGES = ''
 
-version = '0.1dev'
+version = '0.1.0'
 
 install_requires = [
     'Kotti>=1.3.0-dev',
     'kotti_tinymce',
+    'kotti_controlpanel>=1.0.4'
 ]
 
 
 setup(
     name='kotti_history',
     version=version,
-    description="Add on for Kotti",
+    description="Add track the viewership and searches for the various contenttype in Kotti",
     long_description='\n\n'.join([README, CHANGES]),
     classifiers=[
         'Development Status :: 3 - Alpha',
@@ -51,10 +52,10 @@ setup(
         'Topic :: Internet :: WWW/HTTP :: WSGI',
         'Topic :: Internet :: WWW/HTTP :: WSGI :: Application',
     ],
-    author='Kotti developers',
-    author_email='kotti@googlegroups.com',
+    author='Oshane Bailey',
+    author_email='b4.oshany@gmail.com',
     url='https://github.com/b4oshany/kotti_history',
-    keywords='kotti web cms wcms pylons pyramid sqlalchemy bootstrap',
+    keywords='kotti history tracking web cms wcms pylons pyramid sqlalchemy bootstrap',
     license="BSD-derived (http://www.repoze.org/LICENSE.txt)",
     packages=find_packages(),
     include_package_data=True,
@@ -67,5 +68,9 @@ setup(
             'kotti_history = kotti_history.fanstatic:library',
         ],
     },
+    package_data={"kotti_history": ["templates/*", "static/*",
+                                    "locale/*", "views/*",
+                                    "alembic/*.*",
+                                    "alembic/versions/*"]},
     extras_require={},
 )

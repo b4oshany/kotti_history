@@ -10,6 +10,8 @@ from pyramid.i18n import TranslationStringFactory
 
 _ = TranslationStringFactory('kotti_history')
 
+controlpanel_id = "kotti_history"
+
 
 def kotti_configure(settings):
     """ Add a line like this to you .ini file::
@@ -24,9 +26,10 @@ def kotti_configure(settings):
     """
 
     settings['pyramid.includes'] += ' kotti_history'
+    settings['kotti.populators'] += ' kotti_history.populate.populate'
     settings['kotti.alembic_dirs'] += ' kotti_history:alembic'
     settings['kotti.fanstatic.view_needed'] += ' kotti_history.fanstatic.css_and_js'
-    assign_slot('history-recorder', 'inhead')
+    assign_slot('history-recorder', 'belowcontent')
 
 
 def includeme(config):

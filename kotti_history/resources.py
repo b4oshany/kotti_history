@@ -19,25 +19,25 @@ from kotti_history import _
 
 class SearchHistory(Base):
 
-    id = Column(Integer, primary_key=True, nullable=False)
-    user_id = Column(ForeignKey('principals.id',
+    id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
+    username = Column(ForeignKey('principals.name',
                                 onupdate="CASCADE",
                                 ondelete="CASCADE"),
                      primary_key=True)
     term = Column(String, nullable=False)
-    date_last_viewed = Column(DateTime, default=datetime.today())
+    date_last_viewed = Column(DateTime, onupdate=datetime.now, default=datetime.now)
 
     @classmethod
-    def create(cls, user_id, term):
-        sh = cls(user_id=user_id, term=term)
+    def create(cls, username, term):
+        sh = cls(username=username, term=term)
         DBSession.add(sh)
 
     @classmethod
-    def find_by_user(cls, user_id, query=None):
+    def find_by_username(cls, username, query=None):
         if not query:
             query = cls.query
         return query.filter(
-            cls.user_id == user_id
+            cls.username == username
         )
 
     @classmethod
@@ -58,22 +58,27 @@ class ViewHistory(Base):
                            onupdate="CASCADE",
                            ondelete="CASCADE"),
                 primary_key=True)
-    user_id = Column(ForeignKey('principals.id',
+    username = Column(ForeignKey('principals.name',
                                 onupdate="CASCADE",
                                 ondelete="CASCADE"),
                      primary_key=True)
     content_type = Column(String, nullable=False)
+    url = Column(String, nullable=False)
+    title = Column(String, nullable=False)
     num_views = Column(Integer, default=1)
-    date_last_viewed = Column(DateTime, default=datetime.today())
+    date_last_viewed = Column(DateTime, onupdate=datetime.now, default=datetime.now)
 
     @classmethod
     def create(cls, content, user):
         history = cls(
-            user_id=user.id,
+            username=user.name,
             content_type=cls.__class__.__name__,
-            id=content.id
+            id=content.id,
+            title=content.title,
+            url=content.path,
+            num_views=1
         )
-        DBSession.add(history)
+        return history
 
     @classmethod
     def find_by_content_id(cls, id, query=None):
@@ -84,19 +89,19 @@ class ViewHistory(Base):
             )
 
     @classmethod
-    def find_by_user(cls, user_id, query=None):
+    def find_by_username(cls, username, query=None):
         if not query:
             query = cls.query
         return query.filter(
-            cls.user_id == user_id
+            cls.username == username
         )
 
     @classmethod
-    def find(cls, content_id=None, user_id=None):
+    def find(cls, content_id=None, username=None):
         query = cls.query
         if content_id:
             query = cls.find_by_content_id(content_id)
-        if user_id:
-            query = cls.find_by_user_id(user_id)
+        if username:
+            query = cls.find_by_username(username)
         return query
 
